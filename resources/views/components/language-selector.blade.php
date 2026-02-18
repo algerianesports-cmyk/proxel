@@ -21,25 +21,41 @@
 <script>
     // Initialize dropdown logic
     function initLanguageSelector() {
-        const languageBtn = document.querySelector('.language-btn');
-        const languageDropdown = document.querySelector('.language-dropdown');
+        const wrappers = document.querySelectorAll('.language-selector-wrapper');
 
-        if (languageBtn && languageDropdown) {
-            // Clone to remove old listeners
-            const newBtn = languageBtn.cloneNode(true);
-            languageBtn.parentNode.replaceChild(newBtn, languageBtn);
+        wrappers.forEach(wrapper => {
+            const btn = wrapper.querySelector('.language-btn');
+            const dropdown = wrapper.querySelector('.language-dropdown');
 
-            newBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                languageDropdown.classList.toggle('is-open');
-            });
+            if (btn && dropdown) {
+                // Remove old listener cleanly if we are re-initializing
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
 
+                newBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Close other dropdowns if any
+                    document.querySelectorAll('.language-dropdown').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('is-open');
+                    });
+
+                    dropdown.classList.toggle('is-open');
+                });
+            }
+        });
+
+        // Global click to close - check if already attached
+        if (!window.langSelectorClickAttached) {
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.language-selector-wrapper')) {
-                    languageDropdown.classList.remove('is-open');
+                    document.querySelectorAll('.language-dropdown').forEach(d => {
+                        d.classList.remove('is-open');
+                    });
                 }
             });
+            window.langSelectorClickAttached = true;
         }
     }
 
