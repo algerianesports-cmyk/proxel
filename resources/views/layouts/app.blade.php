@@ -5,7 +5,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>@yield('title', __('messages.app_name'))</title>
+    <!-- hreflang SEO tags -->
+    <link rel="alternate" hreflang="fr"
+        href="{{ url('/fr' . '/' . ltrim(request()->path() !== app()->getLocale() ? Str::after(request()->path(), app()->getLocale()) : '', '/')) }}" />
+    <link rel="alternate" hreflang="en"
+        href="{{ url('/en' . '/' . ltrim(request()->path() !== app()->getLocale() ? Str::after(request()->path(), app()->getLocale()) : '', '/')) }}" />
+    <link rel="alternate" hreflang="x-default"
+        href="{{ url('/fr' . '/' . ltrim(request()->path() !== app()->getLocale() ? Str::after(request()->path(), app()->getLocale()) : '', '/')) }}" />
     <!-- Fav Icon -->
     <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-png" />
     <!-- Google Fonts -->
@@ -27,6 +35,62 @@
     <link rel="stylesheet" href="{{ asset('assets/css/woocommerce.css') }}" type="text/css" media="all" />
     <link rel="stylesheet" href="{{ asset('build/assets/custom.css') }}" type="text/css" media="all" />
     @yield('extra_styles')
+    <style>
+        /* Align language switcher with nav items on desktop */
+        .navbar_nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar_nav .menu-item.nav-item {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Ensure nav links (including the language button) are vertically centered */
+        .navbar_nav .menu-item.nav-item .nav-link {
+            display: inline-flex;
+            align-items: center;
+            align-self: center;
+            margin-top: 0;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+
+        .navbar_nav .nav-link.lang-switch-btn {
+            background: none !important;
+            color: #fff !important;
+            padding: 6px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 0;
+        }
+
+        .navbar_nav .nav-link.lang-switch-btn svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Mobile: stack hours and days on two lines */
+        @media (max-width: 767px) {
+            .mobile_topbar_text {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start;
+                gap: 2px;
+            }
+
+            .mobile_topbar_hours,
+            .mobile_topbar_days {
+                display: block !important;
+            }
+
+            .lang-switcher-mobile {
+                display: inline-flex !important;
+            }
+        }
+    </style>
 </head>
 
 <body class="home theme-creote page-home-default-one">
@@ -49,13 +113,57 @@
                                     <span class="line"></span>
                                 </div>
                                 <div class="mobile_topbar_text">
-                                    <span class="mobile_topbar_hours">{{ __('messages.hours_range') }}</span>
+                                    <span class="mobile_topbar_hours"
+                                        data-i18n="messages.hours_range">{{ __('messages.hours_range') }}</span>
                                     <span class="mobile_topbar_sep">|</span>
-                                    <span class="mobile_topbar_days">{{ __('messages.monday_friday') }}</span>
+                                    <span class="mobile_topbar_days"
+                                        data-i18n="messages.monday_friday">{{ __('messages.monday_friday') }}</span>
                                 </div>
                                 <a class="mobile_topbar_phone" href="tel:+15147048045"
                                     aria-label="{{ __('messages.call_us') }}">
                                     <i class="icon-phone-call"></i>
+                                </a>
+                                @php
+                                    $otherLocaleMobile = app()->getLocale() === 'fr' ? 'en' : 'fr';
+                                @endphp
+                                <a href="#" class="lang-switcher-mobile lang-switch-btn"
+                                    data-locale="{{ $otherLocaleMobile }}"
+                                    style="display:inline-flex; align-items:center; gap:4px; padding:4px 10px; cursor:pointer; text-decoration:none; background:#fff; border-radius:4px; margin-left:8px;">
+                                    @if ($otherLocaleMobile === 'en')
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25" width="24"
+                                            height="15" style="border-radius:2px;">
+                                            <rect width="40" height="25" fill="#fff" />
+                                            <rect width="10" height="25" fill="#FF0000" />
+                                            <rect x="30" width="10" height="25" fill="#FF0000" />
+                                            <path d="M20 4l-1.5 4.5H15l3 2.5-1 4L20 13l3 2-1-4 3-2.5h-3.5z"
+                                                fill="#FF0000" />
+                                        </svg>
+                                        <span style="font-weight:700; color:#333; font-size:11px;">EN</span>
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25" width="24"
+                                            height="15" style="border-radius:2px;">
+                                            <rect width="40" height="25" fill="#003DA5" />
+                                            <rect y="10.5" width="40" height="4" fill="#fff" />
+                                            <rect x="18" width="4" height="25" fill="#fff" />
+                                            <g fill="#fff" transform="translate(9,5.5) scale(.35)">
+                                                <path
+                                                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                            </g>
+                                            <g fill="#fff" transform="translate(26,5.5) scale(.35)">
+                                                <path
+                                                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                            </g>
+                                            <g fill="#fff" transform="translate(9,16) scale(.35)">
+                                                <path
+                                                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                            </g>
+                                            <g fill="#fff" transform="translate(26,16) scale(.35)">
+                                                <path
+                                                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                            </g>
+                                        </svg>
+                                        <span style="font-weight:700; color:#333; font-size:11px;">FR</span>
+                                    @endif
                                 </a>
                             </div>
                         </div>
@@ -79,8 +187,10 @@
                                             <div class="mid_content one">
                                                 <span class="icon-deadline mid_icon"></span>
                                                 <div class="text">
-                                                    <h4>{{ __('messages.hours_range') }}</h4>
-                                                    <p>{{ __('messages.monday_friday') }}</p>
+                                                    <h4 data-i18n="messages.hours_range">
+                                                        {{ __('messages.hours_range') }}</h4>
+                                                    <p data-i18n="messages.monday_friday">
+                                                        {{ __('messages.monday_friday') }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,7 +198,8 @@
                                             <div class="mid_content one">
                                                 <span class="icon-24-hours mid_icon"></span>
                                                 <div class="text">
-                                                    <h4>{{ __('messages.contact_number') }}</h4>
+                                                    <h4 data-i18n="messages.contact_number">
+                                                        {{ __('messages.contact_number') }}</h4>
                                                     <p>+15147048045</p>
                                                 </div>
                                             </div>
@@ -110,37 +221,82 @@
                                     <div class="header_content_collapse">
                                         <div class="header_menu_box">
                                             <div class="navigation_menu">
+                                                @php
+                                                    $otherLocale = app()->getLocale() === 'fr' ? 'en' : 'fr';
+                                                @endphp
                                                 <ul id="myNavbar" class="navbar_nav">
+                                                    <li class="menu-item nav-item">
+                                                        <a href="#" id="lang-switcher"
+                                                            class="nav-link lang-switch-btn"
+                                                            data-locale="{{ $otherLocale }}"
+                                                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; cursor:pointer; text-decoration:none;">
+                                                            @if ($otherLocale === 'en')
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 40 25" width="28" height="18"
+                                                                    style="border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,.2);">
+                                                                    <rect width="40" height="25"
+                                                                        fill="#fff" />
+                                                                    <rect width="10" height="25"
+                                                                        fill="#FF0000" />
+                                                                    <rect x="30" width="10" height="25"
+                                                                        fill="#FF0000" />
+                                                                    <path
+                                                                        d="M20 4l-1.5 4.5H15l3 2.5-1 4L20 13l3 2-1-4 3-2.5h-3.5z"
+                                                                        fill="#FF0000" />
+                                                                </svg>
+                                                                <span
+                                                                    style="font-weight:700; color:#fff; font-size:13px;">EN</span>
+                                                            @else
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 40 25" width="28" height="18"
+                                                                    style="border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,.2);">
+                                                                    <rect width="40" height="25"
+                                                                        fill="#003DA5" />
+                                                                    <rect y="10.5" width="40" height="4"
+                                                                        fill="#fff" />
+                                                                    <rect x="18" width="4" height="25"
+                                                                        fill="#fff" />
+                                                                    <g fill="#fff"
+                                                                        transform="translate(9,5.5) scale(.35)">
+                                                                        <path
+                                                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                                                    </g>
+                                                                    <g fill="#fff"
+                                                                        transform="translate(26,5.5) scale(.35)">
+                                                                        <path
+                                                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                                                    </g>
+                                                                    <g fill="#fff"
+                                                                        transform="translate(9,16) scale(.35)">
+                                                                        <path
+                                                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                                                    </g>
+                                                                    <g fill="#fff"
+                                                                        transform="translate(26,16) scale(.35)">
+                                                                        <path
+                                                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                                                                    </g>
+                                                                </svg>
+                                                                <span
+                                                                    style="font-weight:700; color:#fff; font-size:13px;">FR</span>
+                                                            @endif
+                                                        </a>
+                                                    </li>
                                                     <li class="menu-item nav-item active">
                                                         <a href="{{ route('home', ['locale' => app()->getLocale()]) }}"
                                                             class="nav-link">
-                                                            <span>{{ __('messages.home') }}</span>
+                                                            <span
+                                                                data-i18n="messages.home">{{ __('messages.home') }}</span>
                                                         </a>
                                                     </li>
                                                     <li class="menu-item nav-item">
                                                         <a href="#" class="nav-link">
-                                                            <span>{{ __('messages.about') }}</span>
+                                                            <span
+                                                                data-i18n="messages.about">{{ __('messages.about') }}</span>
                                                         </a>
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </div>
-                                        <div class="header_right_content">
-                                            <ul>
-                                                <li class="language-selector-item">
-                                                    @include('components.language-selector')
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="theme-btn five">
-                                                        {{ __('messages.service_appointment') }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="theme-btn five">
-                                                        {{ __('messages.schedule_installation') }}
-                                                    </a>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -249,6 +405,191 @@
         })();
     </script>
     @yield('extra_scripts')
+
+    <!-- Language Switcher JS -->
+    <script>
+        (function() {
+            'use strict';
+
+            const SUPPORTED_LOCALES = ['en', 'fr'];
+            // Base path from Laravel (e.g. "/pr/public" or "")
+            const BASE_URL = '{{ rtrim(url('/'), '/') }}';
+            const basePath = new URL(BASE_URL).pathname.replace(/\/+$/, '');
+
+            /**
+             * Get the current locale from the URL path (after the base path).
+             */
+            function getCurrentLocale() {
+                let path = window.location.pathname;
+                // Strip the base path to get the app-relative path
+                if (basePath && path.startsWith(basePath)) {
+                    path = path.substring(basePath.length);
+                }
+                const segments = path.split('/').filter(Boolean);
+                if (segments.length > 0 && SUPPORTED_LOCALES.includes(segments[0])) {
+                    return segments[0];
+                }
+                return '{{ app()->getLocale() }}';
+            }
+
+            /**
+             * Build a new URL with the target locale prefix.
+             */
+            function buildLocalizedUrl(targetLocale) {
+                const currentLocale = getCurrentLocale();
+                let path = window.location.pathname;
+
+                // Strip the base path
+                let relative = path;
+                if (basePath && path.startsWith(basePath)) {
+                    relative = path.substring(basePath.length);
+                }
+
+                // Replace the locale segment
+                if (relative.startsWith('/' + currentLocale)) {
+                    relative = '/' + targetLocale + relative.substring(('/' + currentLocale).length);
+                } else {
+                    relative = '/' + targetLocale + relative;
+                }
+
+                // Clean up trailing slashes
+                relative = relative.replace(/\/+$/, '') || '/';
+
+                return window.location.origin + basePath + relative + window.location.search;
+            }
+
+            /**
+             * Apply translations to all elements with data-i18n attributes.
+             */
+            function applyTranslations(translations) {
+                document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                    const key = el.getAttribute('data-i18n');
+                    const parts = key.split('.');
+                    let value = translations;
+
+                    for (let i = 0; i < parts.length; i++) {
+                        if (value && typeof value === 'object' && parts[i] in value) {
+                            value = value[parts[i]];
+                        } else {
+                            value = null;
+                            break;
+                        }
+                    }
+
+                    if (value && typeof value === 'string') {
+                        // Check if it's an input placeholder
+                        if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                            el.placeholder = value;
+                        } else if (el.tagName === 'INPUT' && el.type === 'submit') {
+                            el.value = value;
+                        } else {
+                            el.textContent = value;
+                        }
+                    }
+                });
+            }
+
+            /**
+             * Switch language via AJAX without page refresh.
+             */
+            function switchLanguage(targetLocale) {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                fetch(BASE_URL + '/api/language/switch', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            locale: targetLocale
+                        }),
+                    })
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        if (data.success) {
+                            // Apply translations to data-i18n elements
+                            applyTranslations(data.translations);
+
+                            // Update the <html> lang attribute
+                            document.documentElement.lang = targetLocale;
+
+                            // Update the URL using History API
+                            const newUrl = buildLocalizedUrl(targetLocale);
+                            window.history.pushState({
+                                locale: targetLocale
+                            }, '', newUrl);
+
+                            // Update all switcher buttons (desktop + mobile) with flag + label
+                            const otherLocale = targetLocale === 'fr' ? 'en' : 'fr';
+                            const canadaFlag =
+                                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25" width="{W}" height="{H}" style="border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,.2);"><rect width="40" height="25" fill="#fff"/><rect width="10" height="25" fill="#FF0000"/><rect x="30" width="10" height="25" fill="#FF0000"/><path d="M20 4l-1.5 4.5H15l3 2.5-1 4L20 13l3 2-1-4 3-2.5h-3.5z" fill="#FF0000"/></svg>';
+                            const quebecFlag =
+                                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25" width="{W}" height="{H}" style="border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,.2);"><rect width="40" height="25" fill="#003DA5"/><rect y="10.5" width="40" height="4" fill="#fff"/><rect x="18" width="4" height="25" fill="#fff"/><g fill="#fff" transform="translate(9,5.5) scale(.35)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></g><g fill="#fff" transform="translate(26,5.5) scale(.35)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></g><g fill="#fff" transform="translate(9,16) scale(.35)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></g><g fill="#fff" transform="translate(26,16) scale(.35)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></g></svg>';
+
+                            document.querySelectorAll('.lang-switch-btn').forEach(function(btn) {
+                                btn.setAttribute('data-locale', otherLocale);
+                                var isMobile = btn.classList.contains('lang-switcher-mobile');
+                                var w = isMobile ? '24' : '28';
+                                var h = isMobile ? '15' : '18';
+                                var fs = isMobile ? '11px' : '13px';
+                                var color = isMobile ? '#333' : '#fff';
+                                var flag = otherLocale === 'en' ? canadaFlag : quebecFlag;
+                                flag = flag.replace(/\{W\}/g, w).replace(/\{H\}/g, h);
+                                btn.innerHTML = flag +
+                                    '<span style="font-weight:700;color:' + color + ';font-size:' + fs +
+                                    ';">' +
+                                    otherLocale.toUpperCase() + '</span>';
+                            });
+
+                            // Update hreflang tags
+                            document.querySelectorAll('link[hreflang]').forEach(function(link) {
+                                const hl = link.getAttribute('hreflang');
+                                // Get path after basePath + locale
+                                let rel = window.location.pathname;
+                                if (basePath && rel.startsWith(basePath)) {
+                                    rel = rel.substring(basePath.length);
+                                }
+                                rel = rel.replace(/^\/[a-z]{2}/, '');
+                                if (hl === 'x-default') {
+                                    link.href = window.location.origin + basePath + '/fr' + rel;
+                                } else {
+                                    link.href = window.location.origin + basePath + '/' + hl + rel;
+                                }
+                            });
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('Language switch failed:', error);
+                        // Fallback: do a full redirect
+                        window.location.href = buildLocalizedUrl(targetLocale);
+                    });
+            }
+
+            // Bind click event to all language switcher buttons (desktop + mobile)
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.lang-switch-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var targetLocale = this.getAttribute('data-locale');
+                        switchLanguage(targetLocale);
+                    });
+                });
+            });
+
+            // Handle browser back/forward
+            window.addEventListener('popstate', function(event) {
+                if (event.state && event.state.locale) {
+                    switchLanguage(event.state.locale);
+                } else {
+                    window.location.reload();
+                }
+            });
+        })();
+    </script>
 
     <!-- Cookie Consent -->
     @include('components.cookie-consent')

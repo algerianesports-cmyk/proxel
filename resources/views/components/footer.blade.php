@@ -6,7 +6,7 @@
                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-sm-5 mb-md-5 mb-lg-5 mb-xl-0">
                     <div class="footer_contact_form light_c type_one">
                         <div class="form_box_foo">
-                            <h2>{{ __('messages.contact_us') }}</h2>
+                            <h2 data-i18n="messages.contact_us">{{ __('messages.contact_us') }}</h2>
                             <div class="contact_form_shortcode">
                                 <form method="POST" action="#">
                                     @csrf

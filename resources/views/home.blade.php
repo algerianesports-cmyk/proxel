@@ -14,11 +14,14 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                                 <div class="slider_content" style="padding: 50px 0px">
-                                    <h1 class="animated _fadeInDownBig goUP">{{ __('messages.hero_title') }}</h1>
-                                    <p class="animated _flipInY">{{ __('messages.hero_subtitle') }}</p>
+                                    <h1 class="animated _fadeInDownBig goUP" data-i18n="messages.hero_title">
+                                        {{ __('messages.hero_title') }}</h1>
+                                    <p class="animated _flipInY" data-i18n="messages.hero_subtitle">
+                                        {{ __('messages.hero_subtitle') }}</p>
                                     <div class="theme_btn_all color_one" style="margin-top: 30px;">
-                                        <a href="{{ route('service') }}"
-                                            class="theme-btn five">{{ __('messages.service_request') }}</a>
+                                        <a href="{{ route('service', ['locale' => app()->getLocale()]) }}"
+                                            class="theme-btn five"
+                                            data-i18n="messages.service_request">{{ __('messages.service_request') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -37,9 +40,9 @@
                 <div class="col-lg-12">
                     <div class="title_all_box style_three text-center dark_color">
                         <div class="title_sections three">
-                            <div class="before_title">{{ __('messages.leading') }}</div>
-                            <h2>{{ __('messages.effective_solutions') }}</h2>
-                            <p>{{ __('messages.service_description') }}</p>
+                            <div class="before_title" data-i18n="messages.leading">{{ __('messages.leading') }}</div>
+                            <h2 data-i18n="messages.effective_solutions">{{ __('messages.effective_solutions') }}</h2>
+                            <p data-i18n="messages.service_description">{{ __('messages.service_description') }}</p>
                         </div>
                         <div class="mr_bottom_30"></div>
                     </div>
@@ -130,7 +133,8 @@
                 <div class="col-xl-6 col-lg-12 mb-5 mb-lg-5 mb-xl-0">
                     <div class="image_boxes style_four">
                         <div class="image_box one">
-                            <img src="{{ asset('assets/images/about/about-11.jpg') }}" class="img-fluid" alt="about" />
+                            <img src="{{ asset('assets/images/about/about-11.jpg') }}" class="img-fluid"
+                                alt="about" />
                         </div>
                         <div class="image_box">
                             <div class="row">
@@ -163,9 +167,10 @@
                         <div class="pd_top_25"></div>
                         <div class="title_all_box style_three dark_color">
                             <div class="title_sections three left">
-                                <div class="before_title">{{ __('messages.intelligent') }}</div>
-                                <h2>{{ __('messages.leaders_appliance') }}</h2>
-                                <p>{{ __('messages.about_description') }}</p>
+                                <div class="before_title" data-i18n="messages.intelligent">
+                                    {{ __('messages.intelligent') }}</div>
+                                <h2 data-i18n="messages.leaders_appliance">{{ __('messages.leaders_appliance') }}</h2>
+                                <p data-i18n="messages.about_description">{{ __('messages.about_description') }}</p>
                             </div>
                         </div>
                         <div class="mr_bottom_25"></div>
@@ -228,9 +233,10 @@
                 <div class="col-lg-12">
                     <div class="title_all_box style_three text-center dark_color">
                         <div class="title_sections three">
-                            <div class="before_title">The Steps of</div>
-                            <h2>Our Service Process</h2>
-                            <p>We follow a systematic approach to ensure quality service delivery.</p>
+                            <div class="before_title" data-i18n="messages.the_steps_of">{{ __('messages.the_steps_of') }}
+                            </div>
+                            <h2 data-i18n="messages.our_service_process">{{ __('messages.our_service_process') }}</h2>
+                            <p data-i18n="messages.process_description">{{ __('messages.process_description') }}</p>
                         </div>
                         <div class="pd_bottom_25"></div>
                     </div>
@@ -247,8 +253,10 @@
                                 </div>
                             </div>
                             <div class="content_box">
-                                <h2><a href="#">Diagnostic Assessment</a></h2>
-                                <p>Thorough inspection and diagnosis of your appliance issue.</p>
+                                <h2><a href="#"
+                                        data-i18n="messages.diagnostic_assessment">{{ __('messages.diagnostic_assessment') }}</a>
+                                </h2>
+                                <p data-i18n="messages.diagnostic_desc">{{ __('messages.diagnostic_desc') }}</p>
                             </div>
                             <div class="number">
                                 <h6>01</h6>
@@ -267,8 +275,10 @@
                                 </div>
                             </div>
                             <div class="content_box">
-                                <h2><a href="#">Repair Execution</a></h2>
-                                <p>Professional repair using quality parts and techniques.</p>
+                                <h2><a href="#"
+                                        data-i18n="messages.repair_execution">{{ __('messages.repair_execution') }}</a>
+                                </h2>
+                                <p data-i18n="messages.repair_desc_process">{{ __('messages.repair_desc_process') }}</p>
                             </div>
                             <div class="number">
                                 <h6>02</h6>
@@ -297,8 +307,9 @@
                                 </div>
                             </div>
                             <div class="content_box">
-                                <h2><a href="#">Quality Testing</a></h2>
-                                <p>Comprehensive testing to ensure proper operation.</p>
+                                <h2><a href="#"
+                                        data-i18n="messages.quality_testing">{{ __('messages.quality_testing') }}</a></h2>
+                                <p data-i18n="messages.testing_desc">{{ __('messages.testing_desc') }}</p>
                             </div>
                             <div class="number">
                                 <h6>03</h6>
@@ -317,8 +328,10 @@
                                 </div>
                             </div>
                             <div class="content_box">
-                                <h2><a href="#">Customer Satisfaction</a></h2>
-                                <p>Follow-up and warranty guarantee on all services.</p>
+                                <h2><a href="#"
+                                        data-i18n="messages.customer_satisfaction">{{ __('messages.customer_satisfaction') }}</a>
+                                </h2>
+                                <p data-i18n="messages.satisfaction_desc">{{ __('messages.satisfaction_desc') }}</p>
                             </div>
                             <div class="number">
                                 <h6>04</h6>
@@ -338,8 +351,10 @@
                 <div class="col-lg-12">
                     <div class="title_all_box style_three text-center dark_color">
                         <div class="title_sections three">
-                            <div class="before_title">Dedicated Team</div>
-                            <h2>Professional Technicians</h2>
+                            <div class="before_title" data-i18n="messages.dedicated_team">
+                                {{ __('messages.dedicated_team') }}</div>
+                            <h2 data-i18n="messages.professional_technicians">
+                                {{ __('messages.professional_technicians') }}</h2>
                         </div>
                         <div class="mr_bottom_30"></div>
                     </div>
@@ -431,8 +446,9 @@
                 <div class="col-lg-12">
                     <div class="title_all_box style_three text-center dark_color">
                         <div class="title_sections three">
-                            <div class="before_title">{{ __('messages.find_out_our') }}</div>
-                            <h2>{{ __('messages.latest_articles') }}</h2>
+                            <div class="before_title" data-i18n="messages.find_out_our">{{ __('messages.find_out_our') }}
+                            </div>
+                            <h2 data-i18n="messages.latest_articles">{{ __('messages.latest_articles') }}</h2>
                         </div>
                         <div class="mr_bottom_25"></div>
                     </div>

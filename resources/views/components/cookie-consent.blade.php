@@ -1,13 +1,14 @@
 <div id="cookie-consent" class="cookie-consent" style="display: none;">
     <div class="cookie-consent-inner">
         <div class="cookie-content">
-            <h3>Cookie Consent</h3>
-            <p>We use cookies to enhance your experience and analyze site traffic. By clicking "Accept", you consent to
-                our use of cookies.</p>
+            <h3 data-i18n="messages.cookie_title">{{ __('messages.cookie_title') }}</h3>
+            <p data-i18n="messages.cookie_message">{{ __('messages.cookie_message') }}</p>
         </div>
         <div class="cookie-actions">
-            <button id="cookie-reject" class="btn btn-secondary">Reject</button>
-            <button id="cookie-accept" class="btn btn-primary">Accept</button>
+            <button id="cookie-reject" class="btn btn-secondary"
+                data-i18n="messages.cookie_reject">{{ __('messages.cookie_reject') }}</button>
+            <button id="cookie-accept" class="btn btn-primary"
+                data-i18n="messages.cookie_accept">{{ __('messages.cookie_accept') }}</button>
         </div>
     </div>
 </div>

@@ -1,34 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
-class LanguageController extends Controller
+final class LanguageController extends Controller
 {
     /**
-     * Switch application language
-     *
-     * @param Request $request
-     * @param string $locale
-     * @return \Illuminate\Http\RedirectResponse
+     * Supported locales.
      */
-    public function switch(Request $request, $locale)
+    private const SUPPORTED_LOCALES = ['en', 'fr'];
+
+    /**
+     * Switch the application locale via AJAX.
+     *
+     * Stores the selected locale in the session and returns
+     * all translation strings for the new locale so the frontend
+     * can swap content without a full page reload.
+     */
+    public function switch(Request $request): JsonResponse
     {
-        $supportedLocales = ['en', 'fr'];
+        $validated = $request->validate([
+            'locale' => ['required', 'string', 'in:en,fr'],
+        ]);
 
-        // Validate the locale
-        if (!in_array($locale, $supportedLocales)) {
-            $locale = 'fr';
-        }
+        $locale = $validated['locale'];
 
-        // Store language preference in session
+        // Set locale and persist in session
+        App::setLocale($locale);
         session(['locale' => $locale]);
 
-        // Set app locale
-        app()->setLocale($locale);
+        // Load all translation files for the requested locale
+        $translations = $this->loadTranslations($locale);
 
-        // Return a JSON response for the AJAX call
-        return response()->json(['status' => 'success', 'locale' => $locale]);
+        return response()->json([
+            'success' => true,
+            'locale' => $locale,
+            'translations' => $translations,
+        ]);
+    }
+
+    /**
+     * Load all translation arrays for a given locale.
+     *
+     * @return array<string, array<string, string>>
+     */
+    private function loadTranslations(string $locale): array
+    {
+        $langPath = lang_path($locale);
+        $translations = [];
+
+        if (! is_dir($langPath)) {
+            return $translations;
+        }
+
+        foreach (glob($langPath . '/*.php') as $file) {
+            $group = basename($file, '.php');
+            $translations[$group] = require $file;
+        }
+
+        return $translations;
     }
 }

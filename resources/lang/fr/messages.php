@@ -55,7 +55,7 @@ return [
     'diagnostic_assessment' => 'Évaluation Diagnostique',
     'diagnostic_desc' => 'Inspection et diagnostic approfondis de votre problème d\'appareil.',
     'repair_execution' => 'Exécution de la Réparation',
-    'repair_desc' => 'Réparation professionnelle utilisant des pièces et techniques de qualité.',
+    'repair_desc_process' => 'Réparation professionnelle utilisant des pièces et techniques de qualité.',
     'quality_testing' => 'Tests de Qualité',
     'testing_desc' => 'Tests complets pour assurer le bon fonctionnement.',
     'customer_satisfaction' => 'Satisfaction Client',
@@ -118,4 +118,10 @@ return [
     'twitter' => 'twitter',
     'skype' => 'skype',
     'instagram' => 'instagram',
+
+    // Cookie Consent
+    'cookie_title' => 'Consentement aux cookies',
+    'cookie_message' => 'Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic du site. En cliquant sur « Accepter », vous consentez à notre utilisation des cookies.',
+    'cookie_accept' => 'Accepter',
+    'cookie_reject' => 'Refuser',
 ];
